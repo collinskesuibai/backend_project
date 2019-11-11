@@ -1,6 +1,7 @@
 const Pool = require('../buildScripts/poolConfig');
 const pool = Pool.pool;
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 
 const getUsers = (request, response) => {
   pool.query('SELECT * FROM users ORDER BY id ASC', (error, results) => {
@@ -26,32 +27,28 @@ const createUser = (request, response) => {
   // eslint-disable-next-line object-curly-newline
   const { gender, jobRole, department, address } = request.body;
 
-  pool.query(
-    'INSERT INTO users ( firstName, lastName, email, password, gender, jobRole, department, address ) VALUES ($1, $2,$3,$4,$5,$6,$7,$8)',
-    [
-      firstName,
-      lastName,
-      email,
-      password,
-      gender,
-      jobRole,
-      department,
-      address,
-    ],
-    (error, result) => {
-      if (error) {
-        throw error;
-      }
-      response.status(201).send({
-        status: 'success',
-        data: {
-          message: 'User account successfully created',
-          token: 'tondkfnsrioe0434',
-          userId: 'jkjkj',
-        },
-      });
-    },
-  );
+  bcrypt.hash(request.body.password, 16).then(hash => {
+    pool.query(
+      'INSERT INTO users ( firstName, lastName, email, password, gender, jobRole, department, address ) VALUES ($1, $2,$3,$4,$5,$6,$7,$8)',
+      [firstName, lastName, email, hash, gender, jobRole, department, address],
+      (error, result) => {
+        if (error) {
+          throw error;
+        }
+        const token = jwt.sign({ userId: email }, 'RANDOM_TOKEN_SECRET', {
+          expiresIn: '24h',
+        });
+        response.status(201).send({
+          status: 'success',
+          data: {
+            message: 'User account successfully created',
+            token: token,
+            userId: 'jkjkj',
+          },
+        });
+      },
+    );
+  });
 };
 const logIn = (request, response) => {
   const { email, password } = request.body;
@@ -63,27 +60,37 @@ const logIn = (request, response) => {
       if (error) {
         throw error;
       }
-      if (password == result.rows[0].password) {
-        const token = jwt.sign({ userId: email }, 'RANDOM_TOKEN_SECRET', {
-          expiresIn: '24h',
+      console.log(result);
+
+      bcrypt
+        .compare(password, result.rows[0].password)
+        .then(valid => {
+          if (!valid) {
+            response.status(401).send({
+              status: 'error',
+              data: {
+                message: 'Check password ',
+                userId: email,
+              },
+            });
+          }
+          const token = jwt.sign({ userId: email }, 'RANDOM_TOKEN_SECRET', {
+            expiresIn: '24h',
+          });
+          response.status(201).send({
+            status: 'success',
+            data: {
+              message: 'Log in successfully',
+              token: token,
+              userId: email,
+            },
+          });
+        })
+        .catch(error => {
+          res.status(500).json({
+            error: error,
+          });
         });
-        response.status(201).send({
-          status: 'success',
-          data: {
-            message: 'Log in successfully',
-            token: token,
-            userId: email,
-          },
-        });
-      } else {
-        response.status(401).send({
-          status: 'error',
-          data: {
-            message: 'Check password ',
-            userId: email,
-          },
-        });
-      }
     },
   );
 };

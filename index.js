@@ -31,7 +31,7 @@ app.get('/users', auth, dbUser.getUsers);
 app.get('/users/:id', auth, dbUser.getUserById);
 app.get('/gifs/:id', auth, dbGif.getGifById);
 app.get('/articles/:id', auth, dbArticles.getArticlesById);
-app.post('/users', auth, dbUser.createUser);
+app.post('/users', dbUser.createUser);
 app.post('/auth/signin', dbUser.logIn);
 app.post('/gifs/:id', auth, dbComment.createGifComment);
 app.post('/articles/:id', auth, dbComment.createArticleComment);
