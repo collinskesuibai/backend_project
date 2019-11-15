@@ -13,6 +13,9 @@ const cors = require('cors');
 const app = express();
 app.use(cors());
 const port = process.env.PORT || 3000;
+app.get('/', function(request, response) {
+  response.send('hello world');
+});
 
 //app.use('port', port);
 

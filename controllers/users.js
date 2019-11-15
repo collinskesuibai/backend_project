@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 const pool = Pool.pool;
 
 const getUsers = (request, response) => {
-  pool.pool.query('SELECT * FROM users', (error, results) => {
+  pool.query('SELECT * FROM users', (error, results) => {
     if (error) {
       throw error;
     }
