@@ -102,6 +102,7 @@ const createGifPost = (req, res) => {
     });
 
     const path = req.file.path;
+    console.log(path);
     const uniqueFilename = new Date().toISOString();
 
     cloudinary.uploader.upload(
