@@ -20,7 +20,7 @@ pool.query('SELECT * FROM test1', (err, res) => {
   for (let row of res.rows) {
     console.log(JSON.stringify(row));
   }
-  client.end();
+  pool.end();
 });
 
 module.exports = {
