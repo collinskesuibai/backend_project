@@ -14,25 +14,6 @@ const app = express();
 app.use(cors());
 const port = process.env.PORT || 3000;
 
-const { Client } = require('pg');
-
-const client = new Client({
-  connectionString: process.env.DATABASE_URL,
-  ssl: true,
-});
-
-client.connect();
-app.get('/', function(request, response) {
-  client.query('SELECT * FROM test1', (err, res) => {
-    if (err) throw err;
-    for (let row of res.rows) {
-      console.log(JSON.stringify(row));
-    }
-    client.end();
-  });
-  response.send('hello world');
-});
-
 //app.use('port', port);
 
 app.use(bodyParser.json());
