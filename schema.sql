@@ -30,7 +30,7 @@ CREATE TABLE users (
     commentid SERIAL,
     articleid varchar(255) NOT NULL,
     comment varchar(255),
-    createdon varchar(255)
+    createdon varchar(255),
 
     PRIMARY KEY (commentid)
     );
@@ -39,7 +39,7 @@ CREATE TABLE users (
     gifid SERIAL,
     image varchar(255),
     title varchar(255),
-    createdon varchar(255)
+    createdon varchar(255),
 
     PRIMARY KEY (gifid)
     );
