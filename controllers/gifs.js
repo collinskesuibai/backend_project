@@ -89,6 +89,7 @@ const createGifPost = (req, res) => {
   // eslint-disable-next-line consistent-return
   upload(req, res, function(err) {
     if (err) {
+      console.log(err);
       return res.send(err);
     }
     // res.json(req.file);
