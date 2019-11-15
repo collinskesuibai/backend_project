@@ -13,6 +13,14 @@ const cors = require('cors');
 const app = express();
 app.use(cors());
 const port = process.env.PORT || 3000;
+const { Client } = require('pg');
+
+const pool = new Client({
+  connectionString: process.env.DATABASE_URL,
+  ssl: true,
+});
+
+pool.connect();
 //app.use('port', port);
 
 app.use(bodyParser.json());
@@ -23,6 +31,13 @@ app.use(
 );
 app.get('/', function(request, response) {
   response.send('hello world');
+  pool.query('SELECT * FROM test1', (err, res) => {
+    if (err) throw err;
+    for (let row of res.rows) {
+      console.log(JSON.stringify(row));
+    }
+    pool.end();
+  });
 });
 app.get('/gifs', auth, dbGif.getGifs);
 app.get('/feed', auth, dbGif.getFeed);

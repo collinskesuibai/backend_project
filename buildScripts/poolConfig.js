@@ -15,6 +15,13 @@ const pool = new Client({
 });
 
 pool.connect();
+pool.query('SELECT * FROM test1', (err, res) => {
+  if (err) throw err;
+  for (let row of res.rows) {
+    console.log(JSON.stringify(row));
+  }
+  client.end();
+});
 
 module.exports = {
   pool,
