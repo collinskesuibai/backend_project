@@ -23,7 +23,6 @@ const client = new Client({
 
 client.connect();
 app.get('/', function(request, response) {
-  response.send('hello world');
   client.query('SELECT * FROM test1', (err, res) => {
     if (err) throw err;
     for (let row of res.rows) {
@@ -31,6 +30,7 @@ app.get('/', function(request, response) {
     }
     client.end();
   });
+  response.send('hello world');
 });
 
 //app.use('port', port);
