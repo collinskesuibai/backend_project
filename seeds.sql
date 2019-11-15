@@ -1,4 +1,4 @@
 INSERT INTO test1 (name)
-VALUES ("matt"),
-       ("collins"),
-       ("john");
+VALUES ('matt'),
+       ('collins'),
+       ('john');
