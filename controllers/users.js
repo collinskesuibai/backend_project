@@ -1,10 +1,9 @@
-const Pool = require('../buildScripts/poolConfig');
-const pool = Pool.pool;
+const pool = require('../buildScripts/poolConfig');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
 const getUsers = (request, response) => {
-  pool.query('SELECT * FROM users ORDER BY id ASC', (error, results) => {
+  pool.pool.query('SELECT * FROM test1', (error, results) => {
     if (error) {
       throw error;
     }
