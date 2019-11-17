@@ -1,24 +1,19 @@
 /* eslint-disable prefer-arrow-callback */
 /* eslint-disable no-unused-vars */
 /* eslint-disable func-names */
+
 const express = require('express'); /* eslint linebreak-style: ["error", "windows"] */
 const bodyParser = require('body-parser');
 const dbComment = require('./controllers/comments');
 const dbArticles = require('./controllers/articles');
 const dbUser = require('./controllers/users');
-const dbGif = require('./gifs');
+const dbGif = require('./controllers/gifs');
 const auth = require('./middleware/auth');
 const cors = require('cors');
-const fileupload = require('express-fileupload');
 
 const app = express();
 app.use(cors());
 
-app.use(
-  fileupload({
-    useTempFiles: true,
-  }),
-);
 const port = process.env.PORT || 3000;
 app.get('/', function(request, response) {
   response.send('hello world');
