@@ -103,7 +103,7 @@ const createGifPost = (req, res) => {
       api_secret: '9m-0-49SHbf_7lfazdUH1tGsPqw',
     });
 
-    const path = req.file.path;
+    const path = 'uploads/animals.jpg';
     const uniqueFilename = new Date().toISOString();
 
     cloudinary.uploader.upload(
