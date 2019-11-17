@@ -39,7 +39,7 @@ const getGifById = (request, response) => {
             comments: result.rows,
           },
         });
-        console.log(results);
+        //xconsole.log(results);
       },
     );
   });
@@ -87,11 +87,12 @@ const storage = multer.diskStorage({
 const createGifPost = (req, res) => {
   const upload = multer({ storage }).single('name-of-input-key');
   // eslint-disable-next-line consistent-return
+  console.log(upload);
   upload(req, res, function(err) {
-    if (err) {
-      console.log(err);
-      return res.send(err);
-    }
+    // if (err) {
+    //   console.log(err);
+    //   return res.send(err);
+    // }
     // res.json(req.file);
 
     // SEND FILE TO CLOUDINARY
@@ -103,12 +104,11 @@ const createGifPost = (req, res) => {
     });
 
     const path = req.file.path;
-    console.log(path);
     const uniqueFilename = new Date().toISOString();
 
     cloudinary.uploader.upload(
       path,
-      { public_id: `blog/${uniqueFilename}`, tags: `blog` }, // directory and tags are optional
+      { public_id: `images/${uniqueFilename}`, tags: `images` }, // directory and tags are optional
       function(err, image) {
         if (err) return res.send(err);
         console.log('file uploaded to Cloudinary');
