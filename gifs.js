@@ -1,4 +1,4 @@
-const Pool = require('./buildScripts/poolConfig');
+const Pool = require('../buildScripts/poolConfig');
 const pool = Pool.pool;
 
 const multer = require('multer');

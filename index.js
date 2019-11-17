@@ -9,9 +9,16 @@ const dbUser = require('./controllers/users');
 const dbGif = require('./gifs');
 const auth = require('./middleware/auth');
 const cors = require('cors');
+const fileupload = require('express-fileupload');
 
 const app = express();
 app.use(cors());
+
+app.use(
+  fileupload({
+    useTempFiles: true,
+  }),
+);
 const port = process.env.PORT || 3000;
 app.get('/', function(request, response) {
   response.send('hello world');
