@@ -9,6 +9,7 @@ const dbArticles = require('./controllers/articles');
 const dbUser = require('./controllers/users');
 const dbGif = require('./controllers/gifs');
 const auth = require('./middleware/auth');
+const dbFeeds = require('./controllers/feeds');
 const cors = require('cors');
 
 const app = express();
@@ -19,8 +20,6 @@ app.get('/', function(request, response) {
   response.send('hello world');
 });
 
-//app.use('port', port);
-
 app.use(bodyParser.json());
 app.use(
   bodyParser.urlencoded({
@@ -29,7 +28,7 @@ app.use(
 );
 
 app.get('/gifs', auth, dbGif.getGifs);
-app.get('/feed', auth, dbGif.getFeed);
+app.get('/feed', auth, dbFeeds.getFeed);
 app.get('/articles', auth, dbArticles.getArticles);
 app.get('/users', dbUser.getUsers);
 app.get('/users/:id', auth, dbUser.getUserById);
