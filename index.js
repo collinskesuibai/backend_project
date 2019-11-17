@@ -6,7 +6,7 @@ const bodyParser = require('body-parser');
 const dbComment = require('./controllers/comments');
 const dbArticles = require('./controllers/articles');
 const dbUser = require('./controllers/users');
-const dbGif = require('./controllers/gifs');
+const dbGif = require('./gifs');
 const auth = require('./middleware/auth');
 const cors = require('cors');
 

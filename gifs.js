@@ -1,4 +1,4 @@
-const Pool = require('../buildScripts/poolConfig');
+const Pool = require('./buildScripts/poolConfig');
 const pool = Pool.pool;
 
 const multer = require('multer');
@@ -89,10 +89,10 @@ const createGifPost = (req, res) => {
   // eslint-disable-next-line consistent-return
   console.log(upload);
   upload(req, res, function(err) {
-    // if (err) {
-    //   console.log(err);
-    //   return res.send(err);
-    // }
+    if (err) {
+      console.log(err);
+      return res.send(err);
+    }
     // res.json(req.file);
 
     // SEND FILE TO CLOUDINARY
@@ -103,7 +103,7 @@ const createGifPost = (req, res) => {
       api_secret: '9m-0-49SHbf_7lfazdUH1tGsPqw',
     });
 
-    const path = 'uploads/animals.jpg';
+    const path = req.file.path;
     const uniqueFilename = new Date().toISOString();
 
     cloudinary.uploader.upload(
