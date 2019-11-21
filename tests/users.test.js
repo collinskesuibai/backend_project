@@ -44,22 +44,22 @@ describe('/Post users', () => {
   });
 });
 
-describe('/auth/signin', () => {
-  it('it should check if the user exists in the database', (done) => {
-    chai
-      .request(requestUrl)
-      .post('/auth/signin')
-      .set('content-type', 'application/json')
-      .send({
-        email: 'collins@gmail.com',
-        password: '2222',
-      })
-      .end((err, res) => {
-        res.should.have.status(201);
-        done();
-      });
-  });
-});
+// describe('/auth/signin', () => {
+//   it('it should check if the user exists in the database', (done) => {
+//     chai
+//       .request(requestUrl)
+//       .post('/auth/signin')
+//       .set('content-type', 'application/json')
+//       .send({
+//         email: 'collins@gmail.com',
+//         password: '2222',
+//       })
+//       .end((err, res) => {
+//         res.should.have.status(201);
+//         done();
+//       });
+//   });
+// });
 
 describe('/Post /users/:id', () => {
   it('it should edit user information', (done) => {
