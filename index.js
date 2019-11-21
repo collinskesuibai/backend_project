@@ -26,7 +26,7 @@ app.use(
 app.get('/gifs', auth, dbGif.getGifs);
 app.get('/feed', auth, dbFeeds.getFeed);
 app.get('/articles', auth, dbArticles.getArticles);
-app.get('/users', dbUser.getUsers);
+app.get('/users', auth, dbUser.getUsers);
 app.get('/users/:id', auth, dbUser.getUserById);
 app.get('/gifs/:id', auth, dbGif.getGifById);
 app.get('/articles/:id', auth, dbArticles.getArticlesById);
