@@ -61,35 +61,37 @@ const logIn = (request, response) => {
       if (error) {
         throw error;
       }
-      bcrypt
-        .compare(password, result.rows[0].password)
-        .then((valid) => {
-          if (!valid) {
-            response.status(401).send({
-              status: 'error',
+      if (result.rows.length !== 0) {
+        bcrypt
+          .compare(password, result.rows[0].password)
+          .then((valid) => {
+            if (!valid) {
+              response.status(401).send({
+                status: 'error',
+                data: {
+                  message: 'Check password ',
+                  userId: email,
+                },
+              });
+            }
+            const token = jwt.sign({ userId: email }, 'RANDOM_TOKEN_SECRET', {
+              expiresIn: '24h',
+            });
+            response.status(201).send({
+              status: 'success',
               data: {
-                message: 'Check password ',
+                message: 'Log in successfully',
+                token,
                 userId: email,
               },
             });
-          }
-          const token = jwt.sign({ userId: email }, 'RANDOM_TOKEN_SECRET', {
-            expiresIn: '24h',
+          })
+          .catch((err) => {
+            response.status(500).json({
+              err,
+            });
           });
-          response.status(201).send({
-            status: 'success',
-            data: {
-              message: 'Log in successfully',
-              token,
-              userId: email,
-            },
-          });
-        })
-        .catch((err) => {
-          response.status(500).json({
-            err,
-          });
-        });
+      }
     },
   );
 };

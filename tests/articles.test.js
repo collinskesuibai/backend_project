@@ -1,6 +1,8 @@
 // During the test the env variable is set to test
 process.env.NODE_ENV = 'test';
 const requestUrl = 'https://teamwork-apis.herokuapp.com';
+const id = '';
+const auth = '';
 
 // Require the dev-dependencies
 const chai = require('chai');
@@ -14,23 +16,11 @@ describe('/GET articles', () => {
   it('it should GET all the articles', (done) => {
     chai
       .request(requestUrl)
+      .headers({ authorization: auth })
       .get('/articles')
       .end((err, res) => {
         res.should.have.status(200);
         res.body.should.be.a('array');
-        done();
-      });
-  });
-});
-
-describe('/GET /articles/:id', () => {
-  it('it should GET a specific article', (done) => {
-    chai
-      .request(requestUrl)
-      .get('/articles/1')
-      .end((err, res) => {
-        res.should.have.status(200);
-        res.body.should.be.a('Object');
         done();
       });
   });
@@ -49,14 +39,14 @@ describe('/Post /articles/:id', () => {
   });
 });
 
-describe('/Post /articles', () => {
-  it('it should post a new articles', (done) => {
+describe('/GET /articles/:id', () => {
+  it('it should GET a specific article', (done) => {
     chai
       .request(requestUrl)
-      .post('/articles')
+      .get(`/articles/${id}`)
       .end((err, res) => {
         res.should.have.status(200);
-        res.body.should.be.a('array');
+        res.body.should.be.a('Object');
         done();
       });
   });
@@ -66,7 +56,7 @@ describe('/Patch /articles/:id', () => {
   it('it should update a specific article', (done) => {
     chai
       .request(requestUrl)
-      .patch('/articles/:id')
+      .patch(`/articles/${id}`)
       .end((err, res) => {
         res.should.have.status(200);
         res.body.should.be.a('array');
@@ -80,11 +70,9 @@ describe('/Delete /articles/:id', () => {
   it('it should delete a specific article', (done) => {
     chai
       .request(requestUrl)
-      .delete('/articles/:id')
+      .delete(`/articles/${id}`)
       .end((err, res) => {
         res.should.have.status(200);
-        res.body.should.be.a('array');
-        res.body.length.should.be.eql(3);
         done();
       });
   });
