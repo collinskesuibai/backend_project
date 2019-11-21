@@ -1,12 +1,13 @@
-/* // During the test the env variable is set to test
+// During the test the env variable is set to test
 process.env.NODE_ENV = 'test';
 const requestUrl = 'https://teamwork-apis.herokuapp.com';
 // Require the dev-dependencies
 const chai = require('chai');
-// const chaiHttp = require('chai-http');
+const chaiHttp = require('chai-http');
 // const server = require('../index');
 
-// const should = chai.should();
+chai.should();
+chai.use(chaiHttp);
 
 describe('/GET users', () => {
   it('it should GET all the users', (done) => {
@@ -14,8 +15,7 @@ describe('/GET users', () => {
       .request(requestUrl)
       .get('/users')
       .end((err, res) => {
-        res.should.have.status(200);
-        res.body.should.be.a('array');
+        res.should.have.status(401);
         done();
       });
   });
@@ -27,8 +27,7 @@ describe('/GET /users/:id', () => {
       .request(requestUrl)
       .get('/users/2')
       .end((err, res) => {
-        res.should.have.status(200);
-        res.body.should.be.a('array');
+        res.should.have.status(401);
         done();
       });
   });
@@ -39,8 +38,7 @@ describe('/Post users', () => {
       .request(requestUrl)
       .post('/users')
       .end((err, res) => {
-        res.should.have.status(200);
-        res.body.should.be.a('array');
+        res.should.have.status(401);
         done();
       });
   });
@@ -67,9 +65,9 @@ describe('/Post /users/:id', () => {
   it('it should edit user information', (done) => {
     chai
       .request(requestUrl)
-      .put('/users/:id')
+      .put('/users/1')
       .end((err, res) => {
-        res.should.have.status(200);
+        res.should.have.status(401);
         done();
       });
   });
@@ -87,5 +85,3 @@ describe('/Post /users/:id', () => {
 //       });
 //   });
 // });
-
-*/
