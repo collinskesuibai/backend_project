@@ -6,11 +6,10 @@ const requestUrl = 'https://teamwork-apis.herokuapp.com';
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 
-chai.use(chaiHttp);
-
 // const server = require('../index');
 
 chai.should();
+chai.use(chaiHttp);
 
 describe('/GET gifs', () => {
   it('it should GET all the gif posts', (done) => {
