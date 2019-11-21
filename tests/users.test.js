@@ -1,16 +1,17 @@
-//During the test the env variable is set to test
+// During the test the env variable is set to test
 process.env.NODE_ENV = 'test';
+const requestUrl = 'https://teamwork-apis.herokuapp.com';
+// Require the dev-dependencies
+const chai = require('chai');
+// const chaiHttp = require('chai-http');
+// const server = require('../index');
 
-//Require the dev-dependencies
-let chai = require('chai');
-let chaiHttp = require('chai-http');
-let server = require('../index');
-let should = chai.should();
+// const should = chai.should();
 
 describe('/GET users', () => {
-  it('it should GET all the users', done => {
+  it('it should GET all the users', (done) => {
     chai
-      .request('http://localhost:3000')
+      .request(requestUrl)
       .get('/users')
       .end((err, res) => {
         res.should.have.status(200);
@@ -21,9 +22,9 @@ describe('/GET users', () => {
 });
 
 describe('/GET /users/:id', () => {
-  it('it should GET all the users by Id ', done => {
+  it('it should GET all the users by Id ', (done) => {
     chai
-      .request('http://localhost:3000')
+      .request(requestUrl)
       .get('/users/2')
       .end((err, res) => {
         res.should.have.status(200);
@@ -33,9 +34,9 @@ describe('/GET /users/:id', () => {
   });
 });
 describe('/Post users', () => {
-  it('it should create a new user', done => {
+  it('it should create a new user', (done) => {
     chai
-      .request('http://localhost:3000')
+      .request(requestUrl)
       .post('/users')
       .end((err, res) => {
         res.should.have.status(200);
@@ -46,9 +47,9 @@ describe('/Post users', () => {
 });
 
 describe('/auth/signin', () => {
-  it('it should check if the user exists in the database', done => {
+  it('it should check if the user exists in the database', (done) => {
     chai
-      .request('http://localhost:3000')
+      .request(requestUrl)
       .post('/auth/signin')
       .set('content-type', 'application/json')
       .send({
@@ -63,9 +64,9 @@ describe('/auth/signin', () => {
 });
 
 describe('/Post /users/:id', () => {
-  it('it should edit user information', done => {
+  it('it should edit user information', (done) => {
     chai
-      .request('http://localhost:3000')
+      .request(requestUrl)
       .put('/users/:id')
       .end((err, res) => {
         res.should.have.status(200);
@@ -77,7 +78,7 @@ describe('/Post /users/:id', () => {
 // describe('/DELETE /users/:id', () => {
 //   it('it should delete user information', done => {
 //     chai
-//       .request('http://localhost:3000')
+//       .request(requestUrl)
 //       .delete('/users/1')
 //       .end((err, res) => {
 //         res.should.have.status(200);

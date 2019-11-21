@@ -1,19 +1,20 @@
-//During the test the env variable is set to test
+// During the test the env variable is set to test
 process.env.NODE_ENV = 'test';
+const requestUrl = 'https://teamwork-apis.herokuapp.com';
+// Require the dev-dependencies
+const chai = require('chai');
+const chaiHttp = require('chai-http');
+// const server = require('../index');
 
-//Require the dev-dependencies
-let chai = require('chai');
-let chaiHttp = require('chai-http');
-let server = require('../index');
-let should = chai.should();
+// const should = chai.should();
 
 chai.use(chaiHttp);
 
 describe('TeamWork', () => {
   describe('/GET feed', () => {
-    it('it should GET all the articles and gifs', done => {
+    it('it should GET all the articles and gifs', (done) => {
       chai
-        .request('http://localhost:3000')
+        .request(requestUrl)
         .get('/feed')
         .end((err, res) => {
           res.should.have.status(200);

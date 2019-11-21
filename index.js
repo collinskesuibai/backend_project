@@ -1,22 +1,18 @@
-/* eslint-disable prefer-arrow-callback */
-/* eslint-disable no-unused-vars */
-/* eslint-disable func-names */
-
-const express = require('express'); /* eslint linebreak-style: ["error", "windows"] */
+const express = require('express');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 const dbComment = require('./controllers/comments');
 const dbArticles = require('./controllers/articles');
 const dbUser = require('./controllers/users');
 const dbGif = require('./controllers/gifs');
 const auth = require('./middleware/auth');
 const dbFeeds = require('./controllers/feeds');
-const cors = require('cors');
 
 const app = express();
 app.use(cors());
 
-const port = process.env.PORT || 3000;
-app.get('/', function(request, response) {
+const port = process.env.PORT || 4000;
+app.get('/', (request, response) => {
   response.send('hello world');
 });
 
@@ -46,6 +42,4 @@ app.delete('/users/:id', auth, dbUser.deleteUser);
 app.delete('/articles/:id', auth, dbArticles.deleteArticle);
 app.delete('/gifs/:id', auth, dbGif.deleteGif);
 
-app.listen(port, () => {
-  console.log(`App running on port ${port}.`);
-});
+app.listen(port);

@@ -1,7 +1,8 @@
-const Pool = require('../buildScripts/poolConfig');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-const pool = Pool.pool;
+const Pool = require('../buildScripts/poolConfig');
+
+const { pool } = Pool;
 
 const getUsers = (request, response) => {
   pool.query('SELECT * FROM users', (error, results) => {
@@ -12,7 +13,7 @@ const getUsers = (request, response) => {
   });
 };
 const getUserById = (request, response) => {
-  const id = parseInt(request.params.id);
+  const id = parseInt(request.params.id, 10);
 
   pool.query('SELECT * FROM users WHERE id = $1', [id], (error, results) => {
     if (error) {
@@ -27,7 +28,7 @@ const createUser = (request, response) => {
   // eslint-disable-next-line object-curly-newline
   const { gender, jobRole, department, address } = request.body;
 
-  bcrypt.hash(request.body.password, 16).then(hash => {
+  bcrypt.hash(password, 16).then((hash) => {
     pool.query(
       'INSERT INTO users ( firstName, lastName, email, password, gender, jobRole, department, address ) VALUES ($1, $2,$3,$4,$5,$6,$7,$8)',
       [firstName, lastName, email, hash, gender, jobRole, department, address],
@@ -42,7 +43,7 @@ const createUser = (request, response) => {
           status: 'success',
           data: {
             message: 'User account successfully created',
-            token: token,
+            token,
             userId: 'jkjkj',
           },
         });
@@ -60,11 +61,9 @@ const logIn = (request, response) => {
       if (error) {
         throw error;
       }
-      console.log(result);
-
       bcrypt
         .compare(password, result.rows[0].password)
-        .then(valid => {
+        .then((valid) => {
           if (!valid) {
             response.status(401).send({
               status: 'error',
@@ -81,21 +80,21 @@ const logIn = (request, response) => {
             status: 'success',
             data: {
               message: 'Log in successfully',
-              token: token,
+              token,
               userId: email,
             },
           });
         })
-        .catch(error => {
-          res.status(500).json({
-            error: error,
+        .catch((err) => {
+          response.status(500).json({
+            err,
           });
         });
     },
   );
 };
 const updateUser = (request, response) => {
-  const id = parseInt(request.params.id);
+  const id = parseInt(request.params.id, 10);
   const { name, email } = request.body;
 
   pool.query(
@@ -110,7 +109,7 @@ const updateUser = (request, response) => {
   );
 };
 const deleteUser = (request, response) => {
-  const id = parseInt(request.params.id);
+  const id = parseInt(request.params.id, 10);
 
   pool.query('DELETE FROM users WHERE id = $1', [id], (error, results) => {
     if (error) {

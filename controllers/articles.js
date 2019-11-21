@@ -1,5 +1,6 @@
 const Pool = require('../buildScripts/poolConfig');
-const pool = Pool.pool;
+
+const { pool } = Pool;
 
 const getArticles = (request, response) => {
   pool.query(
@@ -13,9 +14,7 @@ const getArticles = (request, response) => {
   );
 };
 const getArticlesById = (request, response) => {
-  const id = parseInt(request.params.id);
-  // IN (SELECT * FROM commentarticles WHERE artcicleid = $1)
-
+  const id = parseInt(request.params.id, 10);
   pool.query(
     'SELECT * FROM articles WHERE articleid = $1',
     [id],
@@ -26,9 +25,9 @@ const getArticlesById = (request, response) => {
       pool.query(
         'SELECT * FROM commentarticle WHERE articleid = $1',
         [id],
-        (error, result) => {
-          if (error) {
-            throw error;
+        (errors, result) => {
+          if (errors) {
+            throw errors;
           }
           response.status(200).json({
             status: 'success',
@@ -40,18 +39,16 @@ const getArticlesById = (request, response) => {
               comments: result.rows,
             },
           });
-          console.log(results);
         },
       );
     },
   );
 };
 const createArticle = (request, response) => {
-  // eslint-disable-next-line object-curly-newline
   const { title, article } = request.body;
-  let dateobj = new Date();
-  let B = dateobj.toISOString();
-  let splitDate = B.split('T');
+  const dateobj = new Date();
+  const B = dateobj.toISOString();
+  const splitDate = B.split('T');
 
   pool.query(
     'INSERT INTO articles ( title, article,createdon) VALUES ($1, $2,$3)',
@@ -60,7 +57,6 @@ const createArticle = (request, response) => {
       if (error) {
         throw error;
       }
-      console.log(result);
       response.status(201).send({
         status: 'success',
         data: {
@@ -74,8 +70,7 @@ const createArticle = (request, response) => {
   );
 };
 const updateArticles = (request, response) => {
-  const id = parseInt(request.params.id);
-  //const id = 2;
+  const id = parseInt(request.params.id, 10);
   const { title, article } = request.body;
 
   pool.query(
@@ -89,8 +84,8 @@ const updateArticles = (request, response) => {
         status: 'success',
         data: {
           message: 'Article successfully updated',
-          title: title,
-          article: article,
+          title,
+          article,
         },
       });
     },
@@ -98,7 +93,7 @@ const updateArticles = (request, response) => {
 };
 
 const deleteArticle = (request, response) => {
-  const id = parseInt(request.params.id);
+  const id = parseInt(request.params.id, 10);
 
   pool.query(
     'DELETE FROM articles WHERE articleId = $1',

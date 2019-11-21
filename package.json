@@ -5,6 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
+    "fix": "eslint . --fix",
+    "lint": "eslint .",
     "test": "mocha --reporter progress  \"tests/**/*.test.js\""
   },
   "repository": {

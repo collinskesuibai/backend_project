@@ -1,5 +1,6 @@
 const Pool = require('../buildScripts/poolConfig');
-const pool = Pool.pool;
+
+const { pool } = Pool;
 
 const getFeed = (request, response) => {
   const { feed } = request.body;

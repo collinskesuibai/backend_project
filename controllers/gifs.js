@@ -1,7 +1,9 @@
-const Pool = require('../buildScripts/poolConfig');
-const pool = Pool.pool;
-
 const multer = require('multer');
+const cloudinary = require('cloudinary').v2;
+const fs = require('fs');
+const Pool = require('../buildScripts/poolConfig');
+
+const { pool } = Pool;
 
 // Contents of above date object is
 // converted into a string using toISOString() function.
@@ -15,7 +17,7 @@ const getGifs = (request, response) => {
   });
 };
 const getGifById = (request, response) => {
-  const id = parseInt(request.params.id);
+  const id = parseInt(request.params.id, 10);
   // IN (SELECT * FROM commentarticles WHERE artcicleid = $1)
 
   pool.query('SELECT * FROM gifs WHERE gifid = $1', [id], (error, results) => {
@@ -25,9 +27,9 @@ const getGifById = (request, response) => {
     pool.query(
       'SELECT * FROM commentgif WHERE gifid = $1',
       [id],
-      (error, result) => {
-        if (error) {
-          throw error;
+      (errors, result) => {
+        if (errors) {
+          throw errors;
         }
         response.status(200).json({
           status: 'success',
@@ -39,7 +41,7 @@ const getGifById = (request, response) => {
             comments: result.rows,
           },
         });
-        //xconsole.log(results);
+        // xconsole.log(results);
       },
     );
   });
@@ -49,7 +51,7 @@ const getGifById = (request, response) => {
 const storage = multer.diskStorage({
   // eslint-disable-next-line func-names
   // eslint-disable-next-line object-shorthand
-  destination: function(req, file, cb) {
+  destination: (req, file, cb) => {
     cb(null, 'uploads/');
   },
   filename(req, file, cb) {
@@ -61,53 +63,48 @@ const storage = multer.diskStorage({
 
 const createGifPost = (req, res) => {
   const upload = multer({ storage }).single('name-of-input-key');
-  // eslint-disable-next-line consistent-return
-  console.log(upload);
-  upload(req, res, function(err) {
+  upload(req, res, (err) => {
     if (err) {
-      console.log(err);
       return res.send(err);
     }
     // res.json(req.file);
 
     // SEND FILE TO CLOUDINARY
-    const cloudinary = require('cloudinary').v2;
     cloudinary.config({
       cloud_name: 'dqsfvc7vo',
       api_key: '624745128193233',
       api_secret: '9m-0-49SHbf_7lfazdUH1tGsPqw',
     });
 
-    const path = req.file.path;
+    const { path } = req.file;
     const uniqueFilename = new Date().toISOString();
 
     cloudinary.uploader.upload(
       path,
-      { public_id: `images/${uniqueFilename}`, tags: `images` }, // directory and tags are optional
-      function(err, image) {
-        if (err) return res.send(err);
-        console.log('file uploaded to Cloudinary');
+      { public_id: `images/${uniqueFilename}`, tags: 'images' }, // directory and tags are optional
+      (error, image) => {
+        if (error) return res.send(error);
         // remove file from server
-        const fs = require('fs');
+
         fs.unlinkSync(path);
         // return image details
         //  res.json(image);
 
-        //post the git to the database
+        // post the git to the database
         //  const { images, title } = request.body;
 
         pool.query(
           'INSERT INTO gifs ( image, title,createdOn) VALUES ($1, $2 ,$3)',
           [image.url, 'image one', image.created_at],
-          (error, result) => {
-            if (error) {
-              throw error;
+          (errors, result) => {
+            if (errors) {
+              throw errors;
             }
-            console.log(result);
-            let dates = image.created_at;
-            let splitDate = dates.split('T');
 
-            res.status(201).send({
+            const dates = image.created_at;
+            const splitDate = dates.split('T');
+
+            return res.status(201).send({
               status: 'success',
               data: {
                 gifId: 8989,
@@ -119,14 +116,15 @@ const createGifPost = (req, res) => {
             });
           },
         );
-        console.log(image.url);
+        return image.url;
       },
     );
+    return 'image uploaded';
   });
 };
 
 const deleteGif = (request, response) => {
-  const id = parseInt(request.params.id);
+  const id = parseInt(request.params.id, 10);
 
   pool.query('DELETE FROM gifs WHERE gifId = $1', [id], (error, results) => {
     if (error) {
