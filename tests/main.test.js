@@ -1,4 +1,4 @@
-// During the test the env variable is set to test
+/* // During the test the env variable is set to test
 process.env.NODE_ENV = 'test';
 const requestUrl = 'https://teamwork-apis.herokuapp.com';
 // Require the dev-dependencies
@@ -24,3 +24,5 @@ describe('TeamWork', () => {
     });
   });
 });
+
+*/
