@@ -1,4 +1,4 @@
-/* // During the test the env variable is set to test
+// During the test the env variable is set to test
 process.env.NODE_ENV = 'test';
 const requestUrl = 'https://teamwork-apis.herokuapp.com';
 
@@ -10,7 +10,7 @@ chai.use(chaiHttp);
 
 // const server = require('../index');
 
-const should = chai.should();
+chai.should();
 
 describe('/GET gifs', () => {
   it('it should GET all the gif posts', (done) => {
@@ -18,8 +18,7 @@ describe('/GET gifs', () => {
       .request(requestUrl)
       .get('/gifs')
       .end((err, res) => {
-        res.should.have.status(200);
-        res.body.should.be.a('array');
+        res.should.have.status(401);
         done();
       });
   });
@@ -31,8 +30,7 @@ describe('/GET /gifs/:id', () => {
       .request(requestUrl)
       .get('/gifs/1')
       .end((err, res) => {
-        res.should.have.status(200);
-        res.body.should.be.a('Object');
+        res.should.have.status(401);
         done();
       });
   });
@@ -44,8 +42,7 @@ describe('/Post /upload', () => {
       .request(requestUrl)
       .post('/upload')
       .end((err, res) => {
-        res.should.have.status(200);
-        res.body.should.be.a('array');
+        res.should.have.status(401);
         done();
       });
   });
@@ -57,11 +54,8 @@ describe('/Post /gifs/:id', () => {
       .request(requestUrl)
       .delete('/gifs/:id')
       .end((err, res) => {
-        res.should.have.status(200);
-        res.body.should.be.a('array');
+        res.should.have.status(401);
         done();
       });
   });
 });
-
-*/
