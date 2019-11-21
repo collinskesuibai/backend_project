@@ -52,7 +52,7 @@ describe('/Patch /articles/:id', () => {
       .request(requestUrl)
       .patch(`/articles/${id}`)
       .end((err, res) => {
-        res.should.have.status(404);
+        res.should.have.status(401);
         done();
       });
   });
